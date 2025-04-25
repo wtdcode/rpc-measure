@@ -25,8 +25,9 @@ async fn measure(args: RpcArgs) -> Result<()> {
         let diff = (now - ts).num_milliseconds();
         s.update(diff as f64)?;
         println!(
-            "Block {} arrived, current: {:.02} ms, avg: {:.02} ms, std: {:.02}, max: {:.02} ms, min: {:.02} ms",
+            "Block {} arrived, raw: {}, diff: {:.02} ms, avg: {:.02} ms, std: {:.02}, max: {:.02} ms, min: {:.02} ms",
             hdr.number,
+            hdr.timestamp,
             diff,
             s.mean().unwrap(),
             s.sample_standard_deviation().unwrap_or_default(),
