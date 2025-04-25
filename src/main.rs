@@ -14,19 +14,19 @@ struct RpcArgs {
 async fn measure(args: RpcArgs) -> Result<()> {
     let rpc = ProviderBuilder::new().connect(&args.rpc).await?;
 
-    let mut sub = rpc.subscribe_full_blocks().into_stream().await?;
+    let mut sub = rpc.subscribe_blocks().await?.into_stream();
     let mut s = Stats::new();
 
     println!("Start to listen blocks...");
-    while let Some(block) = sub.next().await {
+    while let Some(hdr) = sub.next().await {
         let now = Utc::now();
-        let block = block?;
-        let ts = DateTime::from_timestamp(block.header.timestamp as i64, 0).unwrap();
+
+        let ts = DateTime::from_timestamp(hdr.timestamp as i64, 0).unwrap();
         let diff = (now - ts).num_milliseconds();
         s.update(diff as f64)?;
         println!(
             "Block {} arrived, current: {:.02} ms, avg: {:.02} ms, std: {:.02}, max: {:.02} ms, min: {:.02} ms",
-            block.header.number,
+            hdr.number,
             diff,
             s.mean().unwrap(),
             s.sample_standard_deviation().unwrap_or_default(),
