@@ -1,0 +1,13 @@
+[package]
+name = "rpc-measure"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+alloy = { version = "0.15.6", features = ["full"] }
+chrono = "0.4.40"
+clap = { version = "4.5.37", features = ["derive"] }
+color-eyre = "0.6.3"
+tokio = { version = "1.44.2", features = ["full"] }
+tokio-stream = "0.1.17"
+incr_stats = "1.0.2"
